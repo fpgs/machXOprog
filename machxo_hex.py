@@ -184,44 +184,39 @@ class MachXOi2c:
         """No opperation, wakeup device"""
         self.i2c_dev.write(bytes([0xFF, 0xFF, 0xFF, 0xFF]), stop=True)
     
-    def load_jed(self, filename):
-        jed_file = open(filename, 'r')
-        line = jed_file.readline().rstrip()
-        while line:
-            if line[0] == "L":
-                page_addr = int(line[1:])
-                if page_addr == 0:
-                    self.reset_config_addr()
-                    line = jed_file.readline().rstrip()
-                    count = 0
-                    while len(line) == 128:
-                        page_data = [ 
-                            int(line[0:8], 2),
-                            int(line[8:16], 2),
-                            int(line[16:24], 2),
-                            int(line[24:32], 2),
-                            int(line[32:40], 2),
-                            int(line[40:48], 2),
-                            int(line[48:56], 2),
-                            int(line[56:64], 2),
-                            int(line[64:72], 2),
-                            int(line[72:80], 2),
-                            int(line[80:88], 2),
-                            int(line[88:96], 2),
-                            int(line[96:104], 2),
-                            int(line[104:112], 2),
-                            int(line[112:120], 2),
-                            int(line[120:128], 2),
-                            ]
-                        self.program_page(page_data)
+    def load_hex(self, filename):
+        hex_file = open(filename, 'r')
+        count = 0
+        self.reset_config_addr()
+        line = hex_file.readline().rstrip()
+        while count < 3837:
+            if len(line) == 32:
+                page_data = [ 
+                    int(line[0:2], 16),
+                    int(line[2:4], 16),
+                    int(line[4:6], 16),
+                    int(line[6:8], 16),
+                    int(line[8:10], 16),
+                    int(line[10:12], 16),
+                    int(line[12:14], 16),
+                    int(line[14:16], 16),
+                    int(line[16:18], 16),
+                    int(line[18:20], 16),
+                    int(line[20:22], 16),
+                    int(line[22:24], 16),
+                    int(line[24:26], 16),
+                    int(line[26:28], 16),
+                    int(line[28:30], 16),
+                    int(line[30:32], 16),
+                    ]
+                self.program_page(page_data)                       
 # It takes >400us to load command +128 bits at 400kHz
 # You shouldn't need to check the busy flag with I2C
-#                        self.wait_busy()
-                        count += 1
-                        line = jed_file.readline().rstrip()
-                    if line[0] == "*":
-                        print("wrote ", count, " pages")
-                    else:
-                        print("bad page data format")
-            line = jed_file.readline().rstrip()
-        jed_file.close()
+#                self.wait_busy()
+                count += 1
+            else:
+                print("expected 32 bytes, got ", len(line), " at line ", count) 
+            line = hex_file.readline().rstrip()
+        print("wrote ", count, " pages")
+        hex_file.close()
+        self.wait_busy()
