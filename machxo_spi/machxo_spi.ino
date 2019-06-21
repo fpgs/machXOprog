@@ -416,7 +416,6 @@ void setup() {
     Serial.println("card initialized.");
   }
 
-  uint32_t returnVal;
   Serial.print("IDCODE_PUB:  ");
   sprintf(stringBuf, "0x%08X", read_device_id());
   Serial.println(stringBuf);
@@ -434,7 +433,7 @@ void setup() {
   Serial.println(stringBuf);
 
   Serial.print("LSC_READ_FEATURE:  ");
-  returnVal = read_feature_row(spiBuf);
+  read_feature_row(spiBuf);
   sprintf(stringBuf, "0x%02X%02X%02X%02X%02X%02X%02X%02X",
           spiBuf[0], spiBuf[1], spiBuf[2], spiBuf[3],
           spiBuf[4], spiBuf[5], spiBuf[6], spiBuf[7]);
@@ -453,6 +452,8 @@ void setup() {
   Serial.print("LSC_READ_STATUS:  ");
   sprintf(stringBuf, "0x%08X", read_status());
   Serial.println(stringBuf);
+  refresh();
+  Serial.println("Exited configuration mode");
 
 }
 
