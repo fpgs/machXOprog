@@ -1,5 +1,5 @@
 # machXOprog
-program Lattice MachXO2/3 from CircuitPython or Arduino
+Program Lattice MachXO2/3 with CircuitPython or Arduino
 
 ## CircuitPython
 ### Overview
@@ -9,6 +9,8 @@ This is a CircuitPython library that allows updating the internal flash in a Mac
 This library depends on:
 * [Adafruit CircuitPython](https://github.com/adafruit/circuitpython)
 * [Adafruit_CircuitPython_BusDevice](https://github.com/adafruit/Adafruit_CircuitPython_BusDevice|)
+  
+It is highly recommended to use an ARM Cortex M4 board with sufficient memory to run CircuitPython.  External SPI memory is likely required to store the MachXO image.  This code was developed with the [Adafruit Feather M4 Express](https://www.adafruit.com/product/3857)
 
 ### Examples
 * load_jed.py is an example for programming a MachXO2/3 from a .jed file
@@ -25,12 +27,24 @@ To be done:
 ### Credits 
 This was based loosely on [Adafruit_CircuitPython_AVRprog](https://github.com/adafruit/Adafruit_CircuitPython_AVRprog), but the code was all written from scratch
 
-## Arduino 
-machxo_spi.ino
+## Arduino SPI
+machxo_spi/machxo_spi.ino
 
 ### Overview
 This is an Arduino Sketch that allows updating the internal flash in a MachXO2/3 device through SPI with an Arduino board.
 
 ### Dependencies
-This example sketch relies on the SD library to store the image to be loaded onto the device.
+This example sketch relies on the SD library to store the image to be loaded onto the device.  This code was developed with the [Adafruit Feather M0 Adalogger](https://www.adafruit.com/product/2796)
+
+## Arduino I2C
+machxo_i2c/machxo_i2c.ino
+
+### Overview
+This is an Arduino Sketch that allows updating the internal flash in a MachXO2/3 device through I2C with an Arduino board.
+
+### Dependencies
+This example sketch relies on an external SPI flash fat filesystem to store the image to be loaded onto the device.  The following libraries are required:
+* [Adafruit_SPIFlash](https://github.com/adafruit/Adafruit_SPIFlash)
+* [Adafruit_QSPI](https://github.com/adafruit/Adafruit_QSPI)
+This code was developed with the [Adafruit Feather M4 Express](https://www.adafruit.com/product/3857)
 
