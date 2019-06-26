@@ -48,3 +48,6 @@ This example sketch relies on an external SPI flash fat filesystem to store the 
 * [Adafruit_QSPI](https://github.com/adafruit/Adafruit_QSPI)
 This code was developed with the [Adafruit Feather M4 Express](https://www.adafruit.com/product/3857)
 
+### Loading files into external SPI flash
+The simplest way to get files into the external SPI flash is to temporarily load CircuitPython onto the board.  CircuitPython appears as a USB drive and allows you to simply drag-n-drop files into the external SPI flash.  You can find pre-built CircuitPython images at [circuitpython.org/downloads](https://circuitpython.org/downloads)
+
