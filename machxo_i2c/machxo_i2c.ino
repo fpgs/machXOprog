@@ -110,7 +110,7 @@ uint32_t xoEraseUFM() {
 }
 
 uint32_t xoErase(uint32_t flags) {
-  return machXOcmd((0xCB000000 | (flags & 0x0F0000)), NULL, 0, NULL, 0);
+  return machXOcmd((0x0E000000 | (flags & 0x0F0000)), NULL, 0, NULL, 0);
 }
 
 uint32_t xoEnableConfigTransparent() {
