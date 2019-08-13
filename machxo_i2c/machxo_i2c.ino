@@ -149,7 +149,7 @@ uint32_t xoResetConfigAddress() {
   return machXOcmd(0x46000000, NULL, 0, NULL, 0);
 }
 
-uint32_t xoResetUFMAddress(uint32_t flags) {
+uint32_t xoResetUFMAddress() {
   return machXOcmd(0x47000000, NULL, 0, NULL, 0);
 }
 
@@ -158,7 +158,7 @@ uint32_t xoSetConfigAddress(uint32_t page) {
   buf[0] = 0x00;
   buf[1] = 0x00;
   buf[2] = (page>>8)&0xFF;
-  buf[4] = (page)&0xFF;
+  buf[3] = (page)&0xFF;
   return machXOcmd(0xB4000000, buf, 4, NULL, 0);
 }
 
@@ -167,7 +167,7 @@ uint32_t xoSetUFMAddress(uint32_t page) {
   buf[0] = 0x40;
   buf[1] = 0x00;
   buf[2] = (page>>8)&0xFF;
-  buf[4] = (page)&0xFF;
+  buf[3] = (page)&0xFF;
   return machXOcmd(0xB4000000, buf, 4, NULL, 0);
 }
 
