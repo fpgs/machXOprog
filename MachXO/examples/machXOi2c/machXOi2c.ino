@@ -81,7 +81,7 @@ void setup()
   flash.begin();
 
   // Set disk vendor id, product id and revision with string up to 8, 16, 4 characters respectively
-  usb_msc.setID("Lattice", "MachXO Prog", "1.0");
+  usb_msc.setID("Lattice", "MachXO I2C", "0.1");
 
   // Set callback
   usb_msc.setReadWriteCallback(msc_read_cb, msc_write_cb, msc_flush_cb);
@@ -104,6 +104,7 @@ void setup()
 
   Serial.println("Lattice MachXO I2C/SPI Programming example, utilizing");
   Serial.println("Adafruit TinyUSB Mass Storage External Flash example");
+  Serial.println("Includes I2C access for RD1124");
   Serial.print("JEDEC ID: "); Serial.println(flash.getJEDECID(), HEX);
   Serial.print("Flash size: "); Serial.println(flash.size());
 
@@ -183,11 +184,7 @@ void xoStatus() {
 }
 
 void xoConfig() {
-  pinMode(XO_PRGMN, OUTPUT);
-  pinMode(XO_INITN, OUTPUT);
-  delay(1);
   machXO.enableConfigOffline();
-  pinMode(XO_PRGMN, INPUT_PULLUP);
   Serial.println("Enabled Offline Configuration");
 }
 
@@ -208,6 +205,7 @@ void xoProgPin(char *prog) {
     case '0':
     case 'L':
     case 'l':
+      digitalWrite(XO_PRGMN, LOW);
       pinMode(XO_PRGMN, OUTPUT);
       Serial.println("Program_N pin low");
       break;
@@ -226,6 +224,7 @@ void xoInitPin(char *init) {
     case '0':
     case 'L':
     case 'l':
+      digitalWrite(XO_INITN, LOW);
       pinMode(XO_INITN, OUTPUT);
       Serial.println("Init_N pin low");
       break;
@@ -314,9 +313,9 @@ void rd1124MemTst() {
 void rd1124Help(){
   Serial.println("MachXO RD1124 Interface");
   Serial.println("Implemented commands:");
-  Serial.println("I/i D/d   - RD1124 Disable");
-  Serial.println("I/i E/e   - RD1124 Enable");
-  Serial.println("I/i M/m   - RD1124 Memory Test");
+  Serial.println("Z/z D/d   - RD1124 Disable");
+  Serial.println("Z/z E/e   - RD1124 Enable");
+  Serial.println("Z/z M/m   - RD1124 Memory Test");
 }
 
 void xoRD1124(char *rd1124cmd) {
@@ -379,8 +378,8 @@ void printHelp(){
   Serial.println("C/c   - MaxhXO enable offline Configuration");
   Serial.println("E/e   - MaxhXO Erase configuration and UFM");
   Serial.println("R/r   - MachXO Refresh");
-  Serial.println("I/i [0/low/1/high] - MachXO Init_N pin");
-  Serial.println("P/p [0/low/1/high] - MachXO Program_N pin");
+  Serial.println("I/i [0/low/1/high] - MachXO INITN pin");
+  Serial.println("P/p [0/low/1/high] - MachXO PROGRAMN pin");
   Serial.println("L/l [filename] - MachXO Load hex file");
   Serial.println("Z/z [command] - I2C RD1124 Command");
 }

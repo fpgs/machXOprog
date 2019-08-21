@@ -54,6 +54,10 @@ Adafruit_USBD_MSC usb_msc;
 // Lattice MachXO Programmer
 MachXO machXO;
 
+// Additional Programming I/O
+#define XO_PRGMN (9)
+#define XO_INITN (10)
+
 // Set to true when PC write to flash
 bool changed;
 
@@ -68,11 +72,15 @@ const char *delimiters            = ", \t";
 void setup()
 {
   pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(XO_PRGMN, INPUT_PULLUP);
+  pinMode(XO_INITN, INPUT_PULLUP);
+  digitalWrite(XO_PRGMN, LOW);
+  digitalWrite(XO_INITN, LOW);
 
   flash.begin();
 
   // Set disk vendor id, product id and revision with string up to 8, 16, 4 characters respectively
-  usb_msc.setID("Adafruit", "External Flash", "1.0");
+  usb_msc.setID("Lattice", "MachXO Prog", "0.1");
 
   // Set callback
   usb_msc.setReadWriteCallback(msc_read_cb, msc_write_cb, msc_flush_cb);
@@ -206,6 +214,44 @@ void xoLoadHEX(char *filename) {
   }
 }
 
+void xoProgPin(char *prog) {
+  switch (prog[0]) {
+    case '0':
+    case 'L':
+    case 'l':
+      digitalWrite(XO_PRGMN, LOW);
+      pinMode(XO_PRGMN, OUTPUT);
+      Serial.println("Program_N pin low");
+      break;
+    case '1':
+    case 'H':
+    case 'h':
+    default:
+      pinMode(XO_PRGMN, INPUT_PULLUP);
+      Serial.println("Program_N pin high");
+      break;  
+  }
+}
+
+void xoInitPin(char *init) {
+  switch (init[0]) {
+    case '0':
+    case 'L':
+    case 'l':
+      digitalWrite(XO_INITN, LOW);
+      pinMode(XO_INITN, OUTPUT);
+      Serial.println("Init_N pin low");
+      break;
+    case '1':
+    case 'H':
+    case 'h':
+    default:
+      pinMode(XO_INITN, INPUT_PULLUP);
+      Serial.println("Init_N pin high");
+      break;  
+  }
+}
+
 void printDir() {
     if ( !root.open("/") )
     {
@@ -246,6 +292,8 @@ void printHelp(){
   Serial.println("E/e   - MaxhXO Erase configuration and UFM");
   Serial.println("R/r   - MachXO Refresh");
   Serial.println("L/l [filename] - MachXO Load hex file");
+  Serial.println("I/i [0/low/1/high] - MachXO INITN pin");
+  Serial.println("P/p [0/low/1/high] - MachXO PROGRAMN pin");
   Serial.println("");
 }
 
@@ -280,6 +328,14 @@ void runCommand() {
     case 'L':
     case 'l':
       xoLoadHEX(strtok(NULL, delimiters));
+      break;
+    case 'P':
+    case 'p':
+      xoProgPin(strtok(NULL, delimiters));
+      break;
+    case 'I':
+    case 'i':
+      xoInitPin(strtok(NULL, delimiters));
       break;
     case 'D':
     case 'd':
