@@ -206,11 +206,14 @@ void xoLoadHEX(char *filename) {
   } else {
     Serial.print("Opened ");
     Serial.println(filename);
+    machXO.enableConfigOffline();
+    machXO.erase(MACHXO_ERASE_CONFIG_FLASH | MACHXO_ERASE_UFM);
     machXO.loadHex(file);
     file.close();
+    machXO.programDone(); 
+    machXO.refresh();
     Serial.print("Loaded ");    
     Serial.println(filename);   
-    machXO.programDone(); 
   }
 }
 
@@ -291,9 +294,20 @@ void printHelp(){
   Serial.println("C/c   - MaxhXO enable offline Configuration");
   Serial.println("E/e   - MaxhXO Erase configuration and UFM");
   Serial.println("R/r   - MachXO Refresh");
-  Serial.println("L/l [filename] - MachXO Load hex file");
   Serial.println("I/i [0/low/1/high] - MachXO INITN pin");
   Serial.println("P/p [0/low/1/high] - MachXO PROGRAMN pin");
+  Serial.println("L/l [filename] - MachXO Load hex file");
+  Serial.println("  The load command performs these steps:");
+  Serial.println("    - Open file to confirm exists");
+  Serial.println("    - Enter offline configuration mode");
+  Serial.println("    - Erase Configuration and UFM");
+  Serial.println("    - Load hex file into MachXO");
+  Serial.println("    - Send Program Done command");
+  Serial.println("    - Send Refresh command");
+  Serial.println("");
+  Serial.println("It may be necessary to drive PROGRAMN low to access ");
+  Serial.println("the configuration port if Port Persistence is not "); 
+  Serial.println("enabled in the feature bits of the MachXO2/3 device");
   Serial.println("");
 }
 
