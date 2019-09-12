@@ -20,6 +20,13 @@ It is highly recommended to use an ARM Cortex M4 board with sufficient memory to
 * load_jed.py is an example for programming a MachXO2/3 from a .jed file
 * load_hex.py is an example for programming a MachXO2/3 from a .hex file
 
+### Example Files
+
+Some example hex and jedec files are provided in the examples folder for demonstration purposes.
+
+* tiny256.hex/tiny256.jec are examples for the [TinyFPGA AX1](https://store.tinyfpga.com/products/tinyfpga-a1) that blinks the LED
+* xo3starter.hex/xo3starter.jed are examples for the [MachXO3LF Starter Kit](http://www.latticesemi.com/en/Products/DevelopmentBoardsAndKits/MachXO3LFStarterKit) that applies a counter to the LEDs controlled by the switches
+
 ## Status
 
 This can currently program the configuration flash through I2C and has a variety of helper functions for erasing and status.
