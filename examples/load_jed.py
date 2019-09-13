@@ -11,7 +11,7 @@ machxo.enable_config_offline()
 machxo.erase(machxo_i2c.ERASE_CONGFIG_FLASH)
 machxo.wait_busy()
 
-machxo.load_jed('example.jed')
+machxo.load_jed('xo3starter.jed')
 
 machxo.program_done()
 
